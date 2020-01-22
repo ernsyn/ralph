@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logging
-import os
 import re
-import tempfile
 from functools import partial
 
 from dj.choices import Choices, Country
@@ -11,11 +9,9 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
-from django.core.mail import EmailMessage
 from django.db import models, transaction
 from django.forms import ValidationError
 from django.template import Context, Template
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ralph.accounts.models import Regionalizable
@@ -27,8 +23,7 @@ from ralph.assets.models.assets import (
     ServiceEnvironment
 )
 from ralph.assets.utils import move_parents_models
-from ralph.attachments.helpers import add_attachment_from_disk
-from ralph.lib.external_services import ExternalService, obj_to_dict
+from ralph.attachments.utils import send_transition_attachments_to_user
 from ralph.lib.hooks import get_hook
 from ralph.lib.mixins.fields import NullableCharField
 from ralph.lib.mixins.models import (
@@ -41,7 +36,8 @@ from ralph.lib.transitions.decorators import transition_action
 from ralph.lib.transitions.fields import TransitionField
 from ralph.lib.transitions.models import Transition
 from ralph.licences.models import BaseObjectLicence, Licence
-from ralph.reports.models import Report, ReportLanguage
+from ralph.reports.helpers import generate_report
+from ralph.reports.models import ReportLanguage
 
 IMEI_UNTIL_2003 = re.compile(r'^\d{6} *\d{2} *\d{6} *\d$')
 IMEI_SINCE_2003 = re.compile(r'^\d{8} *\d{6} *\d$')
@@ -192,7 +188,12 @@ class BackOfficeAsset(Regionalizable, Asset):
         choices=BackOfficeAssetStatus(),
     )
     imei = NullableCharField(
-        max_length=18, null=True, blank=True, unique=True
+        max_length=18, null=True, blank=True, unique=True,
+        verbose_name=_('IMEI')
+    )
+    imei2 = NullableCharField(
+        max_length=18, null=True, blank=True, unique=True,
+        verbose_name=_('IMEI 2')
     )
     office_infrastructure = models.ForeignKey(
         OfficeInfrastructure, null=True, blank=True
@@ -215,15 +216,18 @@ class BackOfficeAsset(Regionalizable, Asset):
     def __repr__(self):
         return '<BackOfficeAsset: {}>'.format(self.id)
 
-    def validate_imei(self):
-        return IMEI_SINCE_2003.match(self.imei) or \
-            IMEI_UNTIL_2003.match(self.imei)
+    def validate_imei(self, imei):
+        return IMEI_SINCE_2003.match(imei) or IMEI_UNTIL_2003.match(imei)
 
     def clean(self):
         super().clean()
-        if self.imei and not self.validate_imei():
+        if self.imei and not self.validate_imei(self.imei):
             raise ValidationError({
                 'imei': _('%(imei)s is not IMEI format') % {'imei': self.imei}
+            })
+        if self.imei2 and not self.validate_imei(self.imei2):
+            raise ValidationError({
+                'imei2': _('%(imei)s is not IMEI format') % {'imei': self.imei2}  # noqa
             })
 
     def is_liquidated(self, date=None):
@@ -497,50 +501,18 @@ class BackOfficeAsset(Regionalizable, Asset):
             instance.location = user.location
 
     @classmethod
-    def _generate_report(cls, name, requester, instances, language):
-        report = Report.objects.get(name=name)
-        template = report.templates.filter(language=language).first()
-        if not template:
-            template = report.templates.filter(default=True).first()
-
-        template_content = ''
-        with open(template.template.path, 'rb') as f:
-            template_content = f.read()
-
+    def _get_report_context(cls, instances):
         data_instances = [
             {
                 'sn': obj.sn,
                 'model': str(obj.model),
                 'imei': obj.imei,
+                'imei2': obj.imei2,
                 'barcode': obj.barcode,
             }
             for obj in instances
         ]
-        service_pdf = ExternalService('PDF')
-        result = service_pdf.run(
-            template=template_content,
-            data={
-                'id': ', '.join([str(obj.id) for obj in instances]),
-                'now': datetime.datetime.now(),
-                'logged_user': obj_to_dict(requester),
-                'affected_user': obj_to_dict(instances[0].user),
-                'owner': obj_to_dict(instances[0].owner),
-                'assets': data_instances,
-            }
-        )
-        filename = "_".join([
-            timezone.now().isoformat()[:10],
-            instances[0].user.get_full_name().lower().replace(' ', '-'),
-            name,
-        ]) + '.pdf'
-        with tempfile.TemporaryDirectory() as tmp_dirpath:
-            output_path = os.path.join(tmp_dirpath, filename)
-            with open(output_path, 'wb') as f:
-                f.write(result)
-            return add_attachment_from_disk(
-                instances, output_path, requester,
-                _('Document autogenerated by {} transition.').format(name)
-            )
+        return data_instances
 
     @classmethod
     @transition_action(precondition=_check_assets_owner)
@@ -597,30 +569,25 @@ class BackOfficeAsset(Regionalizable, Asset):
     )
     def release_report(cls, instances, requester, transition_id, **kwargs):
         report_name = get_report_name_for_transition_id(transition_id)
-        return cls._generate_report(
+        return generate_report(
             instances=instances, name=report_name, requester=requester,
-            language=kwargs['report_language']
+            language=kwargs['report_language'],
+            context=cls._get_report_context(instances)
         )
 
     @classmethod
     @transition_action(run_after=['release_report', 'return_report',
                                   'loan_report'])
     def send_attachments_to_user(cls, requester, transition_id, **kwargs):
-        if kwargs.get('attachments'):
-            transition = Transition.objects.get(pk=transition_id)
-            context_func = get_hook(
-                'back_office.transition_action.email_context'
-            )
-            context = context_func(transition_name=transition.name)
-            email = EmailMessage(
-                subject=context.subject,
-                body=context.body,
-                from_email=settings.EMAIL_FROM,
-                to=[requester.email]
-            )
-            for attachment in kwargs['attachments']:
-                email.attach_file(attachment.file.path)
-            email.send()
+        context_func = get_hook(
+            'back_office.transition_action.email_context'
+        )
+        send_transition_attachments_to_user(
+            requester=requester,
+            transition_id=transition_id,
+            context_func=context_func,
+            **kwargs
+        )
 
     @classmethod
     @transition_action(
@@ -638,9 +605,10 @@ class BackOfficeAsset(Regionalizable, Asset):
         precondition=_check_user_assigned,
     )
     def return_report(cls, instances, requester, **kwargs):
-        return cls._generate_report(
+        return generate_report(
             instances=instances, name='return', requester=requester,
-            language=kwargs['report_language']
+            language=kwargs['report_language'],
+            context=cls._get_report_context(instances)
         )
 
     @classmethod
@@ -659,9 +627,10 @@ class BackOfficeAsset(Regionalizable, Asset):
         run_after=['assign_owner', 'assign_user', 'assign_loan_end_date']
     )
     def loan_report(cls, instances, requester, **kwargs):
-        return cls._generate_report(
+        return generate_report(
             name='loan', requester=requester, instances=instances,
-            language=kwargs['report_language']
+            language=kwargs['report_language'],
+            context=cls._get_report_context(instances)
         )
 
     @classmethod
@@ -692,6 +661,7 @@ class BackOfficeAsset(Regionalizable, Asset):
     )
     def convert_to_data_center_asset(cls, instances, **kwargs):
         from ralph.data_center.models.physical import DataCenterAsset, Rack  # noqa
+        from ralph.back_office.helpers import bo_asset_to_dc_asset_status_converter  # noqa
         with transaction.atomic():
             for i, instance in enumerate(instances):
                 data_center_asset = DataCenterAsset()
@@ -703,10 +673,16 @@ class BackOfficeAsset(Regionalizable, Asset):
                 data_center_asset.model = AssetModel.objects.get(
                     pk=kwargs['model']
                 )
+                target_status = int(
+                    Transition.objects.values_list('target', flat=True).get(pk=kwargs['transition_id'])  # noqa
+                )
+                data_center_asset.status = bo_asset_to_dc_asset_status_converter(  # noqa
+                    instance.status, target_status
+                )
                 move_parents_models(
                     instance, data_center_asset,
                     exclude_copy_fields=[
-                        'rack', 'model', 'service_env'
+                        'rack', 'model', 'service_env', 'status'
                     ]
                 )
                 data_center_asset.save()

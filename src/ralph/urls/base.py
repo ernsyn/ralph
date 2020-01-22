@@ -16,6 +16,7 @@ SiteTree.current_app_is_admin = lambda self: False
 # notice that each module should have `urlpatters` variable defined
 # (as empty list if there is any custom url)
 api_urls = list(map(lambda u: url(r'^', include(u)), [
+    'ralph.access_cards.api',
     'ralph.accounts.api',
     'ralph.assets.api.routers',
     'ralph.back_office.api',
@@ -29,10 +30,11 @@ api_urls = list(map(lambda u: url(r'^', include(u)), [
     'ralph.supports.api',
     'ralph.security.api',
     'ralph.sim_cards.api',
+    'ralph.ssl_certificates.api',
     'ralph.networks.api',
     'ralph.virtual.api',
     'ralph.lib.custom_fields.api.custom_fields_api',
-    'ralph.lib.transitions.api.routers'
+    'ralph.lib.transitions.api.routers',
 ]))
 # include router urls
 # because we're using single router instance and urls are cached inside this

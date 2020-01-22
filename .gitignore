@@ -24,6 +24,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+package-lock.json
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -60,11 +61,6 @@ src/ralph/settings/*local.py
 src/ralph/cross_validator/settings_local.py
 src/ralph/urls/*local.py
 
-# Vagrant
-vagrant/.vagrant
-vagrant/Vagrantfile.local
-vagrant/provision.local.sh
-
 # mkdocs
 site/
 
@@ -79,10 +75,17 @@ src/ralph/admin/static/elements/elements-min.html
 # TODO: move to src/ralph/static
 src/ralph/admin/static/elements/elements-min.html
 
-debian/ralph-core*
+debian/ralph-core/*
 
 .idea
 !src/ralph/lib
 
 # mypy
 .mypy_cache/
+
+# other
+.python-version
+tags
+*.lock
+.*.swp
+.*.swo

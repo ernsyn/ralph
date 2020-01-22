@@ -14,6 +14,8 @@ from ralph.tests.models import Foo
 
 FACTORY_MAP = {
     'django.contrib.auth.models.Group': 'ralph.accounts.tests.factories.GroupFactory',  # noqa
+    'ralph.access_cards.models.AccessCard': 'ralph.access_cards.tests.factories.AccessCardFactory',  # noqa
+    'ralph.access_cards.models.AccessZone': 'ralph.access_cards.tests.factories.AccessZoneFactory',  # noqa
     'ralph.accounts.models.RalphUser': 'ralph.accounts.tests.factories.UserFactory',  # noqa
     'ralph.accounts.models.Region': 'ralph.accounts.tests.factories.RegionFactory',  # noqa
     'ralph.accounts.models.Team': 'ralph.accounts.tests.factories.TeamFactory',
@@ -87,10 +89,13 @@ FACTORY_MAP = {
     'ralph.supports.models.Support': 'ralph.supports.tests.factories.SupportFactory',  # noqa
     'ralph.supports.models.SupportType': 'ralph.supports.tests.factories.SupportTypeFactory',  # noqa
     'ralph.trade_marks.models.TradeMark': 'ralph.trade_marks.tests.factories.TradeMarkFactory', #noqa
-    'ralph.trade_marks.models.TradeMarksLinkedDomains': 'ralph.trade_marks.tests.factories.TradeMarksLinkedDomainsFactory', #noqa
-    'ralph.trade_marks.models.ProviderAdditionalMarking': 'ralph.trade_marks.tests.factories.ProviderAdditionalMarkingFactory', # noqa
+    'ralph.trade_marks.models.TradeMarksLinkedDomains': 'ralph.trade_marks.tests.factories.TradeMarksLinkedDomainsFactory',  # noqa
+    'ralph.trade_marks.models.ProviderAdditionalMarking': 'ralph.trade_marks.tests.factories.ProviderAdditionalMarkingFactory',  # noqa
+    'ralph.trade_marks.models.TradeMarkCountry': 'ralph.trade_marks.tests.factories.TradeMarkCountryFactory',  # noqa
+    'ralph.trade_marks.models.TradeMarkRegistrarInstitution': 'ralph.trade_marks.tests.factories.TradeMarkRegistrarInstitutionFactory',  # noqa
     'ralph.virtual.models.CloudFlavor': 'ralph.virtual.tests.factories.CloudFlavorFactory',  # noqa
     'ralph.virtual.models.CloudHost': 'ralph.virtual.tests.factories.CloudHostFullFactory',  # noqa
+    'ralph.virtual.models.CloudImage': 'ralph.virtual.tests.factories.CloudImageFactory',  # noqa
     'ralph.virtual.models.CloudProject': 'ralph.virtual.tests.factories.CloudProjectFactory',  # noqa
     'ralph.virtual.models.CloudProvider': 'ralph.virtual.tests.factories.CloudProviderFactory',  # noqa
     'ralph.virtual.models.CloudSyncProcessor': 'ralph.virtual.tests.factories.CloudSyncProcessorFactory',  # noqa

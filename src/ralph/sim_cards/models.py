@@ -1,5 +1,9 @@
+from functools import partial
+
 from dj.choices import Choices
+from django import forms
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.validators import (
     MaxLengthValidator,
     MinLengthValidator,
@@ -8,14 +12,20 @@ from django.core.validators import (
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ralph.back_office.models import Warehouse
+from ralph.attachments.utils import send_transition_attachments_to_user
+from ralph.back_office.models import autocomplete_user, Warehouse
+from ralph.lib.hooks import get_hook
 from ralph.lib.mixins.models import (
     AdminAbsoluteUrlMixin,
     NamedMixin,
     TimeStampMixin
 )
+from ralph.lib.transitions.conf import get_report_name_for_transition_id
+from ralph.lib.transitions.decorators import transition_action
 from ralph.lib.transitions.fields import TransitionField
-
+from ralph.lib.transitions.models import TransitionWorkflowBase
+from ralph.reports.helpers import generate_report
+from ralph.reports.models import ReportLanguage
 
 PUK_CODE_VALIDATORS = [
     MinLengthValidator(5),
@@ -63,7 +73,8 @@ class SIMCardFeatures(
     pass
 
 
-class SIMCard(AdminAbsoluteUrlMixin, TimeStampMixin, models.Model):
+class SIMCard(AdminAbsoluteUrlMixin, TimeStampMixin, models.Model,
+              metaclass=TransitionWorkflowBase):
     pin1 = models.CharField(
         max_length=8, null=True, blank=True,
         help_text=_('Required numeric characters only.'),
@@ -134,3 +145,166 @@ class SIMCard(AdminAbsoluteUrlMixin, TimeStampMixin, models.Model):
 
     def __str__(self):
         return _('SIM Card: {}').format(self.phone_number)
+
+    @classmethod
+    @transition_action(
+        form_fields={
+            'user': {
+                'field': forms.CharField(label=_('User')),
+                'autocomplete_field': 'user',
+                'default_value': partial(autocomplete_user, field_name='user')
+            }
+        },
+        run_after=['unassign_user']
+    )
+    def assign_user(cls, instances, **kwargs):
+        user = get_user_model().objects.get(pk=int(kwargs['user']))
+        for instance in instances:
+            instance.user = user
+
+    @classmethod
+    @transition_action(
+        form_fields={
+            'accept': {
+                'field': forms.BooleanField(
+                    label=_(
+                        'I have read and fully understand and '
+                        'accept the agreement.'
+                    )
+                )
+            },
+        }
+    )
+    def accept_asset_release_agreement(cls, instances, requester, **kwargs):
+        pass
+
+    @classmethod
+    @transition_action(
+        form_fields={
+            'report_language': {
+                'field': forms.ModelChoiceField(
+                    label=_('Release report language'),
+                    queryset=ReportLanguage.objects.all().order_by('-default'),
+                    empty_label=None
+                ),
+                'exclude_from_history': True
+            }
+        },
+        return_attachment=True,
+        run_after=['assign_owner', 'assign_user']
+    )
+    def release_report(cls, instances, requester, transition_id, **kwargs):
+        report_name = get_report_name_for_transition_id(transition_id)
+        return generate_report(
+            instances=instances, name=report_name, requester=requester,
+            language=kwargs['report_language'],
+            context=cls._get_report_context(instances)
+        )
+
+    @classmethod
+    def _get_report_context(cls, instances):
+        context = [
+            {
+                'card_number': obj.card_number,
+                'carrier': obj.carrier.name,
+                'pin1': obj.pin1,
+                'puk1': obj.puk1,
+                'phone_number': obj.phone_number,
+            }
+            for obj in instances
+        ]
+        return context
+
+    @classmethod
+    @transition_action(
+        run_after=['release_report']
+    )
+    def assign_requester_as_an_owner(cls, instances, requester, **kwargs):
+        """Assign current user as an owner"""
+        for instance in instances:
+            instance.owner = requester
+            instance.save()
+
+    @classmethod
+    @transition_action(
+        form_fields={
+            'owner': {
+                'field': forms.CharField(label=_('Owner')),
+                'autocomplete_field': 'owner',
+                'default_value': partial(autocomplete_user, field_name='owner')
+            }
+        },
+        help_text=_('assign owner'),
+        run_after=['unassign_owner']
+    )
+    def assign_owner(cls, instances, **kwargs):
+        owner = get_user_model().objects.get(pk=int(kwargs['owner']))
+        for instance in instances:
+            instance.owner = owner
+
+    @classmethod
+    @transition_action(run_after=['release_report'])
+    def send_attachments_to_user(
+        cls, requester, transition_id, **kwargs
+    ):
+        context_func = get_hook(
+            'back_office.transition_action.email_context'
+        )
+        send_transition_attachments_to_user(
+            requester=requester,
+            transition_id=transition_id,
+            context_func=context_func,
+            **kwargs
+        )
+
+    @classmethod
+    @transition_action(
+        form_fields={
+            'warehouse': {
+                'field': forms.CharField(label=_('Warehouse')),
+                'autocomplete_field': 'warehouse',
+                'default_value': partial(
+                    autocomplete_user,
+                    field_name='warehouse'
+                )
+            }
+        }
+    )
+    def assign_warehouse(cls, instances, **kwargs):
+        warehouse = Warehouse.objects.get(pk=int(kwargs['warehouse']))
+        for instance in instances:
+            instance.warehouse = warehouse
+
+    @classmethod
+    @transition_action(
+        run_after=['loan_report', 'return_report']
+    )
+    def unassign_owner(cls, instances, **kwargs):
+        for instance in instances:
+            kwargs['history_kwargs'][instance.pk][
+                'affected_owner'
+            ] = str(instance.owner)
+            instance.owner = None
+
+    @classmethod
+    @transition_action(
+        run_after=['loan_report', 'return_report']
+    )
+    def unassign_user(cls, instances, **kwargs):
+        for instance in instances:
+            kwargs['history_kwargs'][instance.pk][
+                'affected_user'
+            ] = str(instance.user)
+            instance.user = None
+
+    @classmethod
+    @transition_action(
+        form_fields={
+            'task_url': {
+                'field': forms.URLField(label=_('task URL')),
+            }
+        }
+    )
+    def assign_task_url(cls, instances, **kwargs):
+        for instance in instances:
+            instance.task_url = kwargs['task_url']

@@ -1,188 +1,403 @@
-ralph (3.0.0-29) UNRELEASED; urgency=medium
+ralph (20200121.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ lukaszkarykowski ]
+  * Added transitions to Access Card Module (#3508)
 
- -- root <vagrant@ralph-dev>  Tue, 06 Oct 2015 09:44:30 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Tue, 21 Jan 2020 14:12:24 +0000
 
-ralph (3.0.0-28) UNRELEASED; urgency=medium
+ralph (20200117.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ lukaszkarykowski ]
+  * Introduce Access Card management (#3506)
+  * Add access zones for access cards (#3507)
 
- -- root <vagrant@ralph-dev>  Tue, 06 Oct 2015 09:29:59 +0000
+ -- Szymon Jasinski <szymon.jasinski@allegro.pl>  Fri, 17 Jan 2020 10:36:53 +0000
 
-ralph (3.0.0-27) UNRELEASED; urgency=medium
+ralph (20200116.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  * Add send_attachment to user transition action to SIM cards
 
- -- root <vagrant@ralph-dev>  Wed, 16 Sep 2015 13:32:58 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Thu, 16 Jan 2020 09:36:33 +0000
 
-ralph (3.0.0-26) UNRELEASED; urgency=medium
+ralph (20200115.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ vi4m Marcin Kliks ]
+  * Update installation.md
 
- -- root <root@ralph-dev>  Thu, 29 Jul 2015 15:21:43 +0000
+  [ lukaszkarykowski ]
+  * Changes about electronic give out for SIMCards.
 
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Wed, 15 Jan 2020 09:33:42 +0000
 
-ralph (3.0.0-23) UNRELEASED; urgency=medium
+ralph (20191219.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Kamil Wargula ]
+  * Fix CVE-2019-16865 - bump Pillow version
 
- -- root <root@ralph-dev>  Thu, 23 Jul 2015 15:21:43 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Thu, 19 Dec 2019 10:11:39 +0000
 
-ralph (3.0.0-22) UNRELEASED; urgency=medium
+ralph (20191217.2) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Marek Bleschke ]
+  * Fix missing datepicker css (#3501)
 
- -- root <root@ralph-dev>  Thu, 23 Jul 2015 15:19:17 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Tue, 17 Dec 2019 12:08:07 +0000
 
-ralph (3.0.0-21) UNRELEASED; urgency=medium
+ralph (20191217.2) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ root ]
+  * UNRELEASED
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 23 Jul 2015 15:18:51 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Tue, 17 Dec 2019 12:04:10 +0000
 
-ralph (3.0.0-20) UNRELEASED; urgency=medium
+ralph (20191217.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Marek Bleschke ]
+  * Pin mkdocs-material package version and change mysql version in travis (#3492)
+  * Allow manually specify dates for failure operations (#3494)
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 16:22:04 +0000
+  [ Szymon Jasinski ]
+  * Fix licence invoice report (#3486)
+  * Travis set node version (#3496)
 
-ralph (3.0.0-19) UNRELEASED; urgency=medium
+  [ Roman Prykhodchenko ]
+  * Restricted custom fields
+  * Do not allow changing restricted custom fields
+  * Deprecate python-3.4 support
+  * Temporarily revert "Changes about electronic give out for SIMCards. (#3481)"
 
-  * Team upload.
-  * ralph pre-release test build
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Tue, 17 Dec 2019 09:49:00 +0000
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 15:56:43 +0000
+ralph (20191001.1) bionic; urgency=medium
 
-ralph (3.0.0-18) UNRELEASED; urgency=medium
+  [ lukaszkarykowski ]
+  * Changes about electronic give out for SIMCards. (#3481)
 
-  * Team upload.
-  * ralph pre-release test build
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Tue, 01 Oct 2019 11:51:59 +0000
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 15:29:44 +0000
+ralph (20190814.1) bionic; urgency=medium
 
-ralph (3.0.0-17) UNRELEASED; urgency=medium
+  * change trade mark's "valid to" field to optional (#3480)
 
-  * Team upload.
-  * ralph pre-release test build
+ -- Marek Bleschke <marek.bleschke@allegro.pl>  Wed, 14 Aug 2019 06:12:39 +0000
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 15:22:14 +0000
+ralph (20190807.1) bionic; urgency=medium
 
-ralph (3.0.0-16) UNRELEASED; urgency=medium
+  [ vi4m Marcin Kliks ]
+  * Update LICENSE
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Roman Prykhodchenko ]
+  * Update LICENSE
+  * Update LICENSE
+  * Create a trademark notice
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 09:40:52 +0000
+  [ Maciej Skorczewski ]
+  * RAS-1505 - Add service env do filters in licences admin (#3474)
 
-ralph (3.0.0-15) UNRELEASED; urgency=medium
+  [ Marek Bleschke ]
+  * prevent deleting cloud projects with children (#3478)
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Damian Blejwas ]
+  * Trademarks list and filters changes (#3477)
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 09:10:18 +0000
+ -- Marek Bleschke <marek.bleschke@allegro.pl>  Wed, 07 Aug 2019 05:59:16 +0000
 
-ralph (3.0.0-14) UNRELEASED; urgency=medium
+ralph (20190627.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Szymon Jasinski ]
+  * Custom handler404 (#3469)
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 09:05:47 +0000
+ -- Szymon Jasinski <szymon.jasinski@allegro.pl>  Thu, 27 Jun 2019 07:24:09 +0000
 
-ralph (3.0.0-13) UNRELEASED; urgency=medium
+ralph (20190625.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Tomasz Ziarko ]
+  * Cloud images - support duplicated names
 
- -- MAINTAINER <vagrant@ralph-dev>  Thu, 02 Jul 2015 08:58:37 +0000
+ -- Szymon Jasinski <szymon.jasinski@allegro.pl>  Tue, 25 Jun 2019 12:18:11 +0000
 
-ralph (3.0.0-12) UNRELEASED; urgency=medium
+ralph (20190624.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Tomasz Ziarko ]
+  * Add cloud images support
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 14:24:59 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Mon, 24 Jun 2019 12:45:45 +0000
 
-ralph (3.0.0-11) UNRELEASED; urgency=medium
+ralph (20190618.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  * Simplify package building documentation
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 14:09:37 +0000
+ -- Roman Prykhodchenko <roman.prykhodchenko@allegro.pl>  Tue, 18 Jun 2019 11:13:47 +0000
 
-ralph (3.0.0-10) UNRELEASED; urgency=medium
+ralph (20190617.1) bionic; urgency=medium
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Yixing Yan ]
+  * Update mysql image version
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 14:08:27 +0000
+  [ Szymon Jasinski ]
+  * Use proper line break filter
 
-ralph (3.0.0-9) UNRELEASED; urgency=medium
+  [ Roman Prykhodchenko ]
+  * Searching and filtering cloud flavors by flavor_id
 
-  * Team upload.
-  * ralph pre-release test build
+ -- Roman Prykhodchenko <me@romcheg.me>  Mon, 17 Jun 2019 10:58:44 +0000
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 13:56:18 +0000
+ralph (20190527.1) bionic; urgency=medium
 
-ralph (3.0.0-8) UNRELEASED; urgency=medium
+  [ Szymon Jasinski ]
+  * fix redis settings (#3458)
 
-  * Team upload.
-  * ralph pre-release test build
+ -- Szymon Jasinski <szymon.jasinski@allegro.pl>  Mon, 27 May 2019 15:10:53 +0000
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 12:31:52 +0000
+ralph (20190524.2) bionic; urgency=medium
 
-ralph (3.0.0-7) UNRELEASED; urgency=medium
+  [ Szymon Jasinski ]
+  * fix #3449
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Szymon Jasinski ]
+  * Upgrade Redis and Sentinel related packages and configuration (#3452)
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 12:04:09 +0000
+  [ Roman Prykhodchenko ]
+  * Use git author for Debian changelog
 
-ralph (3.0.0-6) UNRELEASED; urgency=medium
+ -- Damian Blejwas <damian.blejwas@allegro.pl>  Fri, 24 May 2019 12:50:25 +0000
 
-  * Team upload.
-  * ralph pre-release test build
+ralph (20190524.1) bionic; urgency=medium
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 12:02:50 +0000
+  [ Damian Blejwas ]
+  * Fix naming of IMEI fields
 
-ralph (3.0.0-5) UNRELEASED; urgency=medium
+  [ Szymon Jasinski ]
+  * Fix user equipment view (#3454)
 
-  * Team upload.
-  * ralph pre-release test build
+ -- Marek Bleschke <marek.bleschke@allegro.pl>  Fri, 24 May 2019 08:54:58 +0000
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 12:00:47 +0000
+ralph (20190515.1) bionic; urgency=medium
 
-ralph (3.0.0-4) UNRELEASED; urgency=medium
+  [ Maciej Skorczewski ]
+  * Eliminate MX and TXT records from checking_type function
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Marek Bleschke ]
+  * Replace quotation to inches unicode sign in model name for buyout link
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 11:51:43 +0000
+  [ Damian Blejwas ]
+  * Add IMEI2 field
 
-ralph (3.0.0-3) UNRELEASED; urgency=medium
+ -- Roman Prykhodchenko <me@romcheg.me>  Wed, 15 May 2019 09:52:10 +0000
 
-  * Team upload.
-  * ralph pre-release test build
+ralph (20190508.1) bionic; urgency=medium
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 11:40:53 +0000
+  [ Marek Bleschke ]
+  * Show configuration path for cloud hosts. (#3445)
 
-ralph (3.0.0-2) UNRELEASED; urgency=medium
+  [  Marcin Kliks (vi4m) ]
+  * Documentation: Add ralph forum link
 
-  * Team upload.
-  * ralph pre-release test build
+  [ Yixing Yan (yanyx) ]
+  * Fix the development env setup steps (#3447)
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 11:40:34 +0000
+ -- Roman Prykhodchenko <me@romcheg.me>  Wed, 08 May 2019 11:56:05 +0000
 
-ralph (3.0.0-1) UNRELEASED; urgency=medium
+ralph (20190410.2) bionic; urgency=medium
 
-  * Initial release.
+  [ Roman Prykhodchenko ]
+  * Fix the documentation link in the README
 
- -- MAINTAINER <vagrant@ralph-dev>  Mon, 29 Jun 2015 11:39:55 +0000
+ -- Roman Prykhodchenko <me@romcheg.me>  Wed, 10 Apr 2019 12:50:17 +0000
+
+ralph (20190410.1) bionic; urgency=medium
+
+  [ Maciej Skorczewski ]
+  * RAS-1433 | Fix bug in invoice report and add start usage in bulk edit (#3440)
+
+ -- Damian Blewas <damian.blejwas@gmail.com>  Wed, 10 Apr 2019 09:15:50 +0000
+
+ralph (20190313.1) bionic; urgency=medium
+
+  [ Szymon Jasinski ]
+  * Revert "RAS-1296 - handle empty/incorrect payload from dnsaas (#3381)"
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Wed, 13 Mar 2019 09:15:31 +0000
+
+ralph (20190312.1) bionic; urgency=medium
+
+  [ Roman Prykhodchenko ]
+  * Display security scan status in base object lists
+
+  [ Maciej Skorczewski ]
+  * Deleted _ from TradeMarkCountry class
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Tue, 12 Mar 2019 10:26:47 +0000
+
+ralph (20190308.1) bionic; urgency=medium
+
+  [ Roman Prykhodchenko ]
+  * Document development environment
+  * Fix development status (#3430)
+  * Implement snapshot builds for docker images
+
+  [ Maciej Skorczewski ]
+  * Add Registering Institution and Country into Trade Marks model (#3415)
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Fri, 08 Mar 2019 12:49:59 +0000
+
+ralph (20190306.1) bionic; urgency=medium
+
+  [ Arkadiusz Adamski ]
+  * Fix ``KeyError`` exception - dashboards
+
+  [ Roman Prykhodchenko ]
+  * Remove Vagrant support
+  * Remove obsolete packging code
+  * Fix labels for static container (Closes: #3428)
+
+  [ mahomahomaho ]
+  * Handle empty/incorrect payload from dnsaas (#3381)
+
+  [ Russell Clare ]
+  * Update installation.md
+
+  [ Maciej Skorczewski ]
+  * Add start_usage in licences model (#3406)
+
+  [ ahaupt ]
+  * Make network vlan searchable (#3426)
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Wed, 06 Mar 2019 10:21:34 +0000
+
+ralph (20190221.1) bionic; urgency=medium
+
+  [ Szymon Jasinski ]
+  * Fix docker static build (#3410)
+
+  [ vi4m Marcin Kliks ]
+  * SSL Certificates API (#3413)
+
+ -- Mracin Kliks <marcin.kliks@icloud.com>  Thu, 21 Feb 2019 14:19:39 +0000
+
+ralph (20190215.1) bionic; urgency=medium
+
+  [ mahomahomaho ]
+  * Better wording of back office front boxes (#3373)
+
+  [ Szymon Jasinski ]
+  * Docker nginx (#3409)
+
+ -- Szymon Jasinski <szymon@szymi.com> Fri, 15 Feb 2019 12:39:00 +0000
+
+ralph (20190208.1) bionic; urgency=medium
+
+  [ mahomahomaho ]
+  * inkpy in docker-compose (#3369)
+  * from_email in EmailContext (#3367)
+
+  [ Maciej Skorczewski ]
+  * Add model__name to Asset relations data center report (#3368)
+  * Add field "start_usage" in asset model (#3378)
+  * Buyout button in MyEquipmet view (#3346)
+
+  [ Szymon Jasinski ]
+  * documentation fix (#3404)
+
+ -- Szymon Jasinski <szymon@szymi.com>  Fri, 08 Feb 2019 12:57:53 +0000
+
+ralph (20190201.1) bionic; urgency=medium
+
+  [ Roman Prykhodchenko ]
+  * Switch to the new deb repository
+  * Allow to parametrize Gunicorn timeout (#3402)
+
+  [ Szymon Jasinski ]
+  * keep db settings on upgrade (#3399)
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Fri, 01 Feb 2019 17:04:39 +0000
+
+ralph (20190124.2) bionic; urgency=medium
+
+  [ Roman Prykhodchenko ]
+  * Use new repo in the deprecation message
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Thu, 24 Jan 2019 12:45:24 +0000
+
+ralph (20190124.1) bionic; urgency=medium
+
+  [ Roman Prykhodchenko ]
+  * Fix the link in the repo deprecation message
+  * Adapt image build process for DockerHub
+
+ -- root <root@ee06b33a646f>  Thu, 24 Jan 2019 08:40:36 +0000
+
+ralph (20190123.1) bionic; urgency=medium
+
+  [ Maciej Skorczewski ]
+  * Display operations for back office assets
+
+  [ Anna Gabler ]
+  * Added user email to SIM Card API serializers
+  * Add transitions for SIM cards
+  * Added SIM Card info to My Equipment List
+  * Bulk add SIM cards
+
+  [ Szymon Jasinski ]
+  * Match status if possible when converting asset type
+
+  [ Roman Prykhodchenko ]
+  * Re-do docker image
+  * Display a post-install warning to switch to the new repo
+
+ -- Roman Prykhodchenko <me@romcheg.me>  Wed, 23 Jan 2019 08:29:55 +0000
+
+ralph (20190111.1) bionic; urgency=medium
+
+  [ Szymon Jasinski ]
+  * Documentation fix
+
+  [ Roman Prykhodchenko ]
+  * Sign changelog commit
+  * Update packaging documentation
+
+  [ Anton Engelhardt ]
+  * ralphctl fixed sourcing of conf.d/*
+
+ -- Szymon Jasinski <szymon@szymi.com>  Fri, 11 Jan 2019 14:14:23 +0000
+
+ralph (20190109.1) bionic; urgency=medium
+
+  [ Damian Blejwas ]
+  * Network min and max IP, block update via API
+
+ -- root <root@7403e9417371>  Wed, 09 Jan 2019 14:46:09 +0000
+
+ralph (20190108.1) bionic; urgency=medium
+
+  [ vi4m Marcin Kliks ]
+  * Beautiful docs layout + transitions (#3350)
+
+  [ sekuranka ]
+  * Add API for SIM cards (#3357)
+
+  [ Szymon Jasinski ]
+  * Documentation for new package (#3359)
+
+  [ Szymon Jasinski and Roman Prykhodchenko]
+  * Improvements to the debian package
+
+ -- root <root@4d28c6f7de1d>  Tue, 08 Jan 2019 12:31:11 +0000
+
+ralph (20181221.2) bionic; urgency=medium
+
+  [ Szymon Jasinski ]
+  * workaround for bintray (see https://github.com/travis-ci/travis-ci/issues/9656)
+
+ -- PyLabs <pylabs@allegro.pl>  Fri, 21 Dec 2018 12:37:20 +0000
+
+ralph (20181221.1) bionic; urgency=medium
+
+  [ Szymon Jasinski ]
+  * Initial release of new Ralph package
+  * Support for Ubuntu 18.04
+  * Settings in /etc/ralph
+  * Database settings via debconf prompts
+  * ralphctl command for Ralph management
+
+ -- PyLabs <pylabs@allegro.pl>  Fri, 21 Dec 2018 10:19:47 +0000

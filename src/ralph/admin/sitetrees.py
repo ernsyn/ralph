@@ -129,6 +129,7 @@ sitetrees = [
                 section(_('Cloud projects'), 'virtual', 'CloudProject'),
                 section(_('Cloud flavors'), 'virtual', 'CloudFlavor'),
                 section(_('Cloud providers'), 'virtual', 'CloudProvider'),
+                section(_('Cloud images'), 'virtual', 'CloudImage'),
             ],
         ),
         ralph_item(
@@ -137,6 +138,7 @@ sitetrees = [
             url_as_pattern=False,
             perms_mode_all=False,
             children=[
+                section(_('Access Cards'), 'access_cards', 'AccessCard'),
                 section(_('Hardware'), 'back_office', 'backofficeasset'),
                 section(_('SIM Cards'), 'sim_cards', 'SIMCard'),
             ]
@@ -315,6 +317,7 @@ sitetrees = [
                 section(_('Users list'), 'accounts', 'RalphUser'),
                 section(_('Groups list'), 'auth', 'Group'),
                 section(_('Regions'), 'accounts', 'Region'),
+                section(_('Access Zones'), 'access_cards', 'AccessZone'),
                 section(_('Transitions'), 'transitions', 'TransitionModel'),
                 section(_('Report template'), 'reports', 'Report'),
                 section(_('Custom fields'), 'custom_fields', 'CustomField'),

@@ -29,11 +29,11 @@ from ralph.virtual.forms import CloudProviderForm
 from ralph.virtual.models import (
     CloudFlavor,
     CloudHost,
+    CloudImage,
     CloudProject,
     CloudProvider,
     VirtualServer,
-    VirtualServerType
-)
+    VirtualServerType)
 
 if settings.ENABLE_DNSAAS_INTEGRATION:
     from ralph.dns.views import DNSView
@@ -279,7 +279,8 @@ class CloudHostAdmin(
     readonly_fields = ['cloudflavor_name', 'created', 'hostname', 'host_id',
                        'get_cloudproject', 'get_cloudprovider', 'get_service',
                        'get_cpu', 'get_disk', 'get_hypervisor', 'get_memory',
-                       'modified', 'parent', 'service_env', 'image_name']
+                       'modified', 'parent', 'service_env', 'image_name',
+                       'get_configuration_path']
     search_fields = [
         'cloudflavor__name', 'host_id',
         'hostname', 'ethernet_set__ipaddress__hostname'
@@ -297,7 +298,8 @@ class CloudHostAdmin(
                        'get_cloudprovider', 'tags', 'remarks']
         }),
         ('Cloud Project', {
-            'fields': ['get_cloudproject', 'get_service'],
+            'fields': ['get_cloudproject', 'get_service',
+                       'get_configuration_path'],
         }),
         ('Components', {
             'fields': ['cloudflavor_name', 'get_cpu', 'get_memory', 'get_disk',
@@ -394,6 +396,20 @@ class CloudHostAdmin(
     get_service.allow_tags = True
     get_service._permission_field = 'service_env'
 
+    def get_configuration_path(self, obj):
+        if obj.configuration_path_id:
+            return '<a href="{}">{}</a>'.format(
+                reverse(
+                    'admin:assets_configurationclass_change',
+                    args=[obj.configuration_path_id]
+                ),
+                obj.configuration_path
+            )
+        return ''
+    get_configuration_path.short_description = _('Configuration path')
+    get_configuration_path.allow_tags = True
+    get_configuration_path._permission_field = 'configuration_path'
+
     def get_cpu(self, obj):
         return obj.cloudflavor.cores
     get_cpu.short_description = _('vCPU cores')
@@ -411,7 +427,7 @@ class CloudHostAdmin(
 class CloudFlavorAdmin(RalphAdmin):
     list_display = ['name', 'flavor_id', 'cores', 'memory', 'disk', 'get_tags',
                     'instances_count']
-    search_fields = ['name']
+    search_fields = ['name', 'flavor_id']
     readonly_fields = ['name', 'cloudprovider', 'flavor_id', 'cores',
                        'memory', 'disk', 'instances_count']
     list_filter = ['cloudprovider', TagsListFilter]
@@ -493,3 +509,15 @@ class CloudProviderAdmin(RalphAdmin):
     form = CloudProviderForm
     list_display = ['name', 'cloud_sync_enabled', 'cloud_sync_driver']
     list_filter = ['name', 'cloud_sync_enabled', 'cloud_sync_driver']
+
+
+@register(CloudImage)
+class CloudImageAdmin(RalphAdmin):
+    list_display = ['name', 'image_id']
+    list_filter = ['name']
+
+    fieldsets = (
+        ('Cloud Image', {
+            'fields': ['name', 'image_id']
+        }),
+    )
